@@ -1,0 +1,79 @@
+---
+# tasks file for ansible-role-dotfiles---
+# tasks file for ansible-role-vim
+
+- name: Run the equivalent of "pacman -Sy" before installing vim
+  pacman:
+    update_cache: yes
+  become: yes
+  when: ansible_os_family == 'Archlinux'
+
+- name: Install vim with pacman
+  pacman:
+    name: vim
+    state: present
+  become: yes
+  when: ansible_os_family == 'Archlinux'
+
+- name: Copy .vimrc to {{ vim_config }}
+  copy:
+    src: .vimrc
+    dest: "{{ vim_config }}"
+    owner: "{{ vim_user }}"
+    group: "{{ vim_group }}"
+    mode: '0640'
+    backup: yes
+
+- name: Install vim plugins with Vundle
+  # Must use the "--not-a-term" flag or vim will print
+  # "warning: Output is not to a terminal".
+  shell: vim +PluginInstall +qall --not-a-term > /dev/null
+
+- name: Install zsh with pacman
+  pacman:
+    name: zsh
+    state: present
+  become: yes
+  when: ansible_os_family == 'Archlinux'
+
+- name: Clone oh-my-zsh git repository
+  git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: "{{ zsh_ohmyzsh }}"
+
+- name: Clone powerlevel9k oh-my-zsh theme
+  git:
+    repo: https://github.com/bhilburn/powerlevel9k.git
+    dest: "{{ zsh_custom }}/themes/powerlevel9k"
+
+- name: Create symlink for powerlevel9k oh-my-zsh theme
+  file:
+    src: "{{ zsh_custom }}/themes/powerlevel9k/powerlevel9k.zsh-theme"
+    dest: "{{ zsh_custom }}/themes/powerlevel9k.zsh-theme"
+    state: link
+    force: yes
+
+- name: Clone spaceship-prompt oh-my-zsh theme
+  git:
+    repo: https://github.com/denysdovhan/spaceship-prompt.git
+    dest: "{{ zsh_custom }}/themes/spaceship-prompt"
+
+- name: Create symlink for spaceship-prompt oh-my-zsh theme
+  file:
+    src: "{{ zsh_custom }}/themes/spaceship-prompt/spaceship.zsh-theme"
+    dest: "{{ zsh_custom }}/themes/spaceship.zsh-theme"
+    state: link
+    force: yes
+
+- name: Write .zshrc config
+  template:
+    src: zshrc.j2
+    dest: "{{ zsh_config }}"
+    owner: "{{ zsh_user }}"
+    group: "{{ zsh_group }}"
+    backup: yes
+
+- name: Change shell for user running playbook to zsh
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /bin/zsh
