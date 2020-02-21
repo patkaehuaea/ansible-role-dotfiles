@@ -5,6 +5,7 @@ user_home: "{{ lookup('env','HOME') }}"
 user_group: users
 vim_config: "{{ user_home }}/.vimrc"
 dotfiles:
+  - '.shellpaths'
   - '.shellvars'
   - '.zshenv'
 zsh_config: "{{ user_home }}/.zshrc"
