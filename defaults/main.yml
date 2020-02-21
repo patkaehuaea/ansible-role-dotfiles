@@ -1,7 +1,10 @@
 ---
 # defaults file for ansible-role-dotfiles
 
-vim_user: "{{ ansible_user_id }}"
 vim_group: users
-zsh_user: "{{ ansible_user_id }}"
+vim_user: "{{ ansible_user_id }}"
+zsh_files:
+  - '.shellvars'
+  - '.zshenv'
 zsh_group: users
+zsh_user: "{{ ansible_user_id }}"

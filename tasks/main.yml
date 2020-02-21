@@ -19,8 +19,8 @@
   copy:
     src: .vimrc
     dest: "{{ vim_config }}"
-    owner: "{{ vim_user }}"
-    group: "{{ vim_group }}"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ user_group }}"
     mode: '0640'
     backup: yes
 
@@ -69,9 +69,15 @@
   template:
     src: zshrc.j2
     dest: "{{ zsh_config }}"
-    owner: "{{ zsh_user }}"
-    group: "{{ zsh_group }}"
+    owner:  "{{ ansible_user_id }}"
+    group: "{{ user_group }}"
     backup: yes
+
+- name: Copy dotfiles
+  copy:
+    src: {{ item }}
+    dest: {{ user_home }}/{{ item }}
+    with_items: "{{ dotfiles }}"
 
 - name: Change shell for user running playbook to zsh
   user:
