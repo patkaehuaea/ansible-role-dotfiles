@@ -73,11 +73,12 @@
     group: "{{ user_group }}"
     backup: yes
 
-- name: Copy dotfiles
+- name: Copy dotfiles to user home directory
   copy:
-    src: {{ item }}
-    dest: {{ user_home }}/{{ item }}
-    with_items: "{{ dotfiles }}"
+    src: "{{ item }}"
+    dest: "{{ user_home }}/{{ item }}"
+  with_items:
+    - "{{ dotfiles }}"
 
 - name: Change shell for user running playbook to zsh
   user:
