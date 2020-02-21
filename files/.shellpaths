@@ -1,0 +1,14 @@
+#My Scripts
+export PATH=$PATH:.
+
+#Brew
+export PATH=/usr/local/sbin:$PATH
+export PATH=/usr/local/bin:$PATH
+
+# Golang
+export GOPATH=$HOME/go
+export GOROOT=/usr/local/opt/go/libexec
+export PATH=$PATH:$GOPATH/bin
+
+# Ansible
+export PATH=$PATH:$HOME/Library/Python/3.7/bin
