@@ -2,9 +2,6 @@
 export PATH=$PATH:/usr/local/go/bin
 export GOPATH=$HOME/go
 
-# Ansible
-export PATH=$PATH:$HOME/Library/Python/3.7/bin
-
 # Azure CLI
 # Resolves issues resolving Sself-signed certs when invoking az login
 export REQUESTS_CA_BUNDLE=$(python3 -c "from requests.utils import DEFAULT_CA_BUNDLE_PATH; print(DEFAULT_CA_BUNDLE_PATH)")
