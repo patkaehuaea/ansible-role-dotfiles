@@ -60,7 +60,6 @@
     repo: 'https://github.com/patkaehuaea/dotfiles.git'
     dest: "{{ dotfiles_src }}"
 
-
   # Loop through dotfiles repository and create directories
   # and symlinks to match filetree. Choosing to loop
   # instead of managing separately.
