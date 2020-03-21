@@ -57,8 +57,8 @@
 
 - name: Clone dotfiles repository
   git:
-    repo: 'https://github.com/patkaehuaea/dotfiles.git'
-    dest: "{{ dotfiles_src }}"
+    repo: "{{ dotfiles_repo }}"
+    dest: "{{ dotfiles_dest }}"
 
   # Loop through dotfiles repository and create directories
   # and symlinks to match filetree. Choosing to loop

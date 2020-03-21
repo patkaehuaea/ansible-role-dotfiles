@@ -1,28 +1,8 @@
 ---
 # vars file for ansible-role-dotfiles
 
-dotfiles:
-  - '.bash_profile'
-  - '.bashrc'
-  - '.crontab'
-  - '.config/'
-  - '.gemrc'
-  - '.gitconfig'
-  - '.gitignore'
-  - '.local/'
-  - '.screenrc'
-  - '.shellaliases'
-  - '.shellfn'
-  - '.shellpaths'
-  - '.shellvars'
-  - '.tmux.conf'
-  - '.todo.cfg'
-  - '.vimrc'
-  - '.zshenv'
-  - '.zshrc'
-dotfiles_config: "{{ user_home }}/src/.config"
-dotfiles_local: "{{ dotfiles_src }}/.local"
-dotfiles_src: "{{ user_home }}/src/dotfiles"
+dotfiles_repo: "https://github.com/patkaehuaea/dotfiles.git"
+dotfiles_dest: "{{ user_home }}/src/dotfiles"
 user_home: "{{ lookup('env','HOME') }}"
 user_group: users
 vim_config: "{{ user_home }}/.vimrc"
