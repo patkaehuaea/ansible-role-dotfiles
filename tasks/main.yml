@@ -1,6 +1,5 @@
 ---
-# tasks file for ansible-role-dotfiles---
-# tasks file for ansible-role-vim
+# tasks file for ansible-role-dotfiles
 
 - name: Run the equivalent of "pacman -Sy" before installing vim
   pacman:
@@ -14,15 +13,6 @@
     state: present
   become: yes
   when: ansible_os_family == 'Archlinux'
-
-- name: Copy .vimrc to {{ vim_config }}
-  copy:
-    src: .vimrc
-    dest: "{{ vim_config }}"
-    owner: "{{ ansible_user_id }}"
-    group: "{{ user_group }}"
-    mode: '0640'
-    backup: yes
 
 - name: Install vim plugins with Vundle
   # Must use the "--not-a-term" flag or vim will print
@@ -65,24 +55,35 @@
     state: link
     force: yes
 
-- name: Write .zshrc config
-  template:
-    src: zshrc.j2
-    dest: "{{ zsh_config }}"
-    owner:  "{{ ansible_user_id }}"
-    group: "{{ user_group }}"
-    mode: '0640'
-    backup: yes
+- name: Clone dotfiles repository
+  git:
+    repo: 'https://github.com/patkaehuaea/dotfiles.git'
+    dest: "{{ dotfiles_src }}"
 
-- name: Copy dotfiles to user home directory
-  copy:
-    src: "{{ item }}"
-    dest: "{{ user_home }}/{{ item }}"
+
+  # Loop through dotfiles repository and create directories
+  # and symlinks to match filetree. Choosing to loop
+  # instead of managing separately.
+
+- name: Create directories
+  file:
+    path: "{{ user_home }}/{{ item.path }}"
+    state: directory
+    mode: '{{ item.mode }}'
+  with_filetree: "{{ dotfiles_src }}/homedir"
+  when: item.state == 'directory'
+
+- name: Create symlinks
+  file:
+    src: '{{ item.src }}'
+    dest: '{{ user_home }}/{{ item.path }}'
     owner: "{{ ansible_user_id }}"
     group: "{{ user_group }}"
-    mode: '0640'
-  with_items:
-    - "{{ dotfiles }}"
+    mode: '{{ item.mode }}'
+    state: link
+    force: yes
+  with_filetree: "{{ dotfiles_src }}/homedir"
+  when: item.state == 'file'
 
 - name: Change shell for user running playbook to zsh
   user:
