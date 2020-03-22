@@ -67,9 +67,12 @@
 - name: Create directories
   file:
     path: "{{ user_home }}/{{ item.path }}"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ user_group }}"
+    mode: '{{ item.mode }}'
     state: directory
     mode: '{{ item.mode }}'
-  with_filetree: "{{ dotfiles_src }}/homedir"
+  with_filetree: "{{ dotfiles_homedir }}"
   when: item.state == 'directory'
 
 - name: Create symlinks
@@ -81,7 +84,7 @@
     mode: '{{ item.mode }}'
     state: link
     force: yes
-  with_filetree: "{{ dotfiles_src }}/homedir"
+  with_filetree: "{{ dotfiles_homedir }}"
   when: item.state == 'file'
 
 - name: Change shell for user running playbook to zsh

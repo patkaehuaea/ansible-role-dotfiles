@@ -3,6 +3,7 @@
 
 dotfiles_repo: "https://github.com/patkaehuaea/dotfiles.git"
 dotfiles_dest: "{{ user_home }}/src/dotfiles"
+dotfiles_homedir: "{{ dotfiles_dest }}/homedir"
 user_home: "{{ lookup('env','HOME') }}"
 user_group: users
 vim_config: "{{ user_home }}/.vimrc"
